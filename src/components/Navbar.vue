@@ -3,7 +3,7 @@
     <b-navbar toggleable="lg" type="dark" variant="black">
         <b-navbar-brand style="padding-left: 20px;" @click="goHome" href="#">
             <b-icon-shop></b-icon-shop>
-            Shoes Store
+            Daniyal Store
         </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav style="justify-content: flex-end;
