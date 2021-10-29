@@ -32,7 +32,7 @@
                                 <h4>{{ data.item.quantity }}</h4>
                             </b-col>
                             <b-col cols="3" class="text-center">
-                                <b-button :disabled="data.item.quantity < 1" @click="increment(data.item.id)" variant="dark" class="mr-2">
+                                <b-button :disabled="data.item.quantity >= data.item.stock" @click="increment(data.item.id)" variant="dark" class="mr-2">
                                     +
                                 </b-button>
                             </b-col>
@@ -44,6 +44,7 @@
                         </b-col>
                     </template>
                 </b-table>
+                <b-alert :show="dismissCountDown" fade variant="danger" @dismiss-count-down="countDownChanged">This item is out of stock</b-alert>
             </b-col>
         </b-row>
         <b-row class="text-center" v-if="cart.length > 0">
@@ -110,6 +111,7 @@ export default {
                 products: null,
                 total: 0,
             },
+            dismissCountDown: 0,
             counter: 0,
             cart: [],
             fields: ["#", "remove", "image", "name", "quantity", "price"],
@@ -146,6 +148,9 @@ export default {
                 if (this.cart[index].id == id) {
                     this.cart[index].quantity++;
                     localStorage.setItem("products", JSON.stringify(this.cart));
+                    if (this.cart[index].quantity >= this.cart[index].stock) {
+                        this.dismissCountDown = 3
+                    }
                 }
             }
         },
@@ -157,6 +162,9 @@ export default {
                 }
             }
         },
+        countDownChanged(dismissCountDown) {
+            this.dismissCountDown = dismissCountDown
+        }
     },
     computed: {
         total() {
