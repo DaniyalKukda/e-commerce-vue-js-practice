@@ -1,5 +1,7 @@
 <template>
 <div>
+    <span>Enter User Name :   </span>
+    <input type="text" v-model="name" @keypress.enter="updateUser" />
     <Table @onRowClick="onRowClick"></Table>
     <h1 v-show="userName">{{userName | toUpperCase}} is Clicked</h1>
 </div>
@@ -14,13 +16,18 @@ export default {
     },
     data() {
         return {
-            userName: ""
+            userName: "",
+            name: "",
         }
     },
-    methods:{
-        onRowClick(name){
+    methods: {
+        onRowClick(name) {
             this.userName = name
+        },
+        updateUser() {
+            this.$root.$emit("updateUser", this.name);
+            this.name = ""
         }
-    }
+    },
 }
 </script>
