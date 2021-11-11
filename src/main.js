@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
 
 Vue.config.productionTip = false
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
@@ -13,8 +12,9 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
-
+Vue.filter("toUpperCase",(name) => {
+ return name.toUpperCase()
+})
 new Vue({
-  router,
   render: h => h(App)
 }).$mount('#app')
