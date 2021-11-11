@@ -37,7 +37,7 @@ export default {
                 'email',
             ],
             users: [],
-            isBusy:true
+            isBusy: true
         }
     },
     created() {
@@ -49,9 +49,9 @@ export default {
             this.isBusy = false
         })
     },
-    methods:{
-        rowClicked(data){
-            console.log(data.name)
+    methods: {
+        rowClicked(data) {
+            this.$emit("onRowClick", data.name)
         }
     }
 }
