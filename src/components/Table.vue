@@ -1,5 +1,5 @@
 <template>
-<b-table @row-clicked="rowClicked" hover :fields="fields" :items="users" :busy="isBusy" class="mt-3" responsive="lg">
+<b-table :tbody-tr-class="rowClass" @row-clicked="rowClicked" hover :fields="fields" :items="users" :busy="isBusy" class="mt-3" responsive="lg">
     <template #table-busy>
         <div class="text-center text-danger my-2">
             <b-spinner class="align-middle"></b-spinner>
@@ -41,6 +41,15 @@ export default {
         }
     },
     created() {
+        this.$root.$on("updateUser", (name) => {
+            this.users.push({
+                id: Math.floor(Math.random() * 1000),
+                email: "custom@email.com",
+                name,
+                index: this.users.length,
+                regNo: Math.floor(Math.random() * 1000)
+            });
+        });
         db.collection("users").onSnapshot(querySnapshot => {
             querySnapshot.forEach(doc => {
                 const data = doc.data()
@@ -52,6 +61,10 @@ export default {
     methods: {
         rowClicked(data) {
             this.$emit("onRowClick", data.name)
+        },
+        rowClass(item, type) {
+            if (!item || type !== 'row') return
+            return (this.users.indexOf(item) & 1) ? "table-danger" : "table-success"
         }
     }
 }
