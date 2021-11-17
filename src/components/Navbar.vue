@@ -9,13 +9,16 @@
         <b-collapse id="nav-collapse" is-nav style="justify-content: flex-end;
     padding-right: 20px;">
             <b-navbar-nav class="ml-auto">
-                <b-nav-item @click="gotocart" active>Cart <b-icon-cart></b-icon-cart></b-nav-item>
+                <b-nav-item @click="goToCart" active>Cart <b-icon-cart></b-icon-cart></b-nav-item>
                 <b-nav-item-dropdown right>
                     <template v-slot:button-content>
-                        <em>User</em>
+                        <em>Admin</em>
                     </template>
                     <b-dropdown-item v-b-modal.modal-1>Sign in</b-dropdown-item>
                 </b-nav-item-dropdown>
+                <b-nav-item  v-show="!isLogin" @click="goToLogin" active>Login</b-nav-item>
+                <b-nav-item v-show="!isLogin" @click="goToRegister" active>Register</b-nav-item>
+                <b-nav-item v-show="isLogin" @click="logout" active>Logout</b-nav-item>
             </b-navbar-nav>
         </b-collapse>
     </b-navbar>
@@ -37,10 +40,13 @@
 </template>
 
 <script>
+import {
+    auth
+} from "@/firebase";
 export default {
     data() {
         return {
-            cart: '',
+            isLogin: false,
             form: {
                 user: '',
                 pass: ''
@@ -48,18 +54,24 @@ export default {
         }
     },
     created() {
-        if (JSON.parse(localStorage.getItem('products'))) {
-            this.cart = JSON.parse(localStorage.getItem('products'))
-        } else {
-            return
-        }
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                this.isLogin = true
+            }
+        });
     },
     methods: {
-        gotocart() {
+        goToCart() {
             this.$router.push('/cart')
         },
         goHome() {
             this.$router.push('/')
+        },
+        goToLogin(){
+            this.$router.push('/login')
+        },
+        goToRegister(){
+            this.$router.push('/register')
         },
         onSubmit(e) {
             e.preventDefault();
@@ -70,6 +82,9 @@ export default {
             } else {
                 return false
             }
+        },
+        logout(){
+            auth.signOut()
         }
     }
 }
