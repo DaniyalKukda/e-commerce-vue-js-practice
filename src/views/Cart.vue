@@ -97,7 +97,8 @@
 
 <script>
 import {
-    db
+    db,
+    auth
 } from "@/firebase";
 import navbar from "@/components/Navbar.vue";
 export default {
@@ -176,6 +177,11 @@ export default {
         }
     },
     created() {
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                this.$router.push("/login")
+            }
+        });
         if (JSON.parse(localStorage.getItem("products"))) {
             this.cart = JSON.parse(localStorage.getItem("products"));
         } else {
